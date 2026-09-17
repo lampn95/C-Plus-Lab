@@ -14,3 +14,7 @@ run: $(TARGET)
 
 clean:
 	rm -f $(TARGET)
+
+.PHONY: kafka
+kafka:
+	$(MAKE) -C kafka-lite
