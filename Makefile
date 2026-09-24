@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall
+CXXFLAGS = -std=c++20 -Wall
 
 TARGET = hello-world
 SRC = hello-world.cpp
@@ -12,9 +12,18 @@ $(TARGET): $(SRC)
 run: $(TARGET)
 	./$(TARGET)
 
-clean:
-	rm -f $(TARGET)
+ABSL_PREFIX = /opt/homebrew
+ABSL_LIBS = -labsl_raw_hash_set -labsl_hash -labsl_city -labsl_throw_delegate -labsl_raw_logging_internal
 
-.PHONY: kafka
+clean:
+	rm -f $(TARGET) algorithms/map_test
+
+.PHONY: kafka map_test
 kafka:
 	$(MAKE) -C kafka-lite
+
+map_test: algorithms/map_test.cpp
+	c++ -std=c++20 $< -o algorithms/map_test \
+		-I$(ABSL_PREFIX)/include -L$(ABSL_PREFIX)/lib \
+		-Wl,-rpath,$(ABSL_PREFIX)/lib $(ABSL_LIBS)
+	./algorithms/map_test
